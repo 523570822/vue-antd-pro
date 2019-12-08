@@ -22,13 +22,20 @@ const roleMap = [
 const menus = [
   {
     id: '1',
+    icon: 'student',
+    path: '/student  ',
+    name: 'student',
+    title: '学员'
+  },
+  {
+    id: '2',
     icon: 'table',
     path: '/table',
     name: 'table',
     title: '表格页'
   },
   {
-    id: '2',
+    id: '3',
     icon: 'dashboard',
     path: '/dashboard',
     name: 'dashboard',
@@ -84,10 +91,10 @@ module.exports = () => {
       message: 'success'
     }
   }
-  
+
   for (let i = 0; i < 54; i++) {
     data.users.push(casual.user(casual.random_element(roleMap)))
   }
-  
+
   return data
 }

@@ -22,51 +22,69 @@ const otherRoutes = [
     ]
   }
 ]
+export const menuZj = [
+  {
+    path: 'student',
+    name: 'student',
+    title: '学员信息',
+    icon: 'table',
+    meta: {
+      title: '学员信息',
+      icon: 'table'
+    },
+    component: () => import(/* we5438284601153252packChunkName: "table" */ '@/views/student/student')
+  },
+  {
+    path: 'table',
+    name: 'table',
+    title: '表格页122',
+    icon: 'table',
+    meta: {
+      title: '表格页122',
+      icon: 'table'
+    },
+    component: () => import(/* webpackChunkName: "table" */ '@/views/table/table')
+  },
+  {
+    path: 'dashboard',
+    name: 'dashboard',
+    title: 'Dashboard',
+    icon: 'dashboard',
+    meta: {
+      title: 'Dashboard',
+      icon: 'dashboard'
+    },
+    component: ViewLayout,
+    children: [
+      {
+        path: 'analysis',
+        name: 'dashboard_analysis',
+        title: '分析页',
+        meta: {
+          title: '分析页'
+        },
+        component: () => import(/* webpackChunkName: "analysis" */ '@/views/dashboard/analysis')
+      },
+      {
+        path: 'monitor',
+        name: 'dashboard_monitor',
+        title: '监控页',
 
+        meta: {
+          title: '监控页'
+        },
+        component: () => import(/* webpackChunkName: "monitor" */ '@/views/dashboard/monitor')
+      }
+    ]
+  }
+]
 export const appRoutes = [
   {
     path: '/',
     name: 'index',
     redirect: '/dashboard/analysis',
     component: AppLayout,
-    children: [
-      {
-        path: 'table',
-        name: 'table',
-        meta: {
-          title: '表格页',
-          icon: 'table'
-        },
-        component: () => import(/* webpackChunkName: "table" */ '@/views/table/table')
-      },
-      {
-        path: 'dashboard',
-        name: 'dashboard',
-        meta: {
-          title: 'Dashboard',
-          icon: 'dashboard'
-        },
-        component: ViewLayout,
-        children: [
-          {
-            path: 'analysis',
-            name: 'dashboard_analysis',
-            meta: {
-              title: '分析页'
-            },
-            component: () => import(/* webpackChunkName: "analysis" */ '@/views/dashboard/analysis')
-          },
-          {
-            path: 'monitor',
-            name: 'dashboard_monitor',
-            meta: {
-              title: '监控页'
-            },
-            component: () => import(/* webpackChunkName: "monitor" */ '@/views/dashboard/monitor')
-          }
-        ]
-      }
-    ]
+    children: menuZj
   }
 ]
 

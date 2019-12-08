@@ -2,6 +2,7 @@
 import { mapState } from 'vuex'
 import { appStoreMixin, deviceMixin } from '@/mixins'
 import { generateOpenKeys } from '@/utils'
+import { menuZj } from '../../router/routes'
 
 export default {
   mixins: [appStoreMixin, deviceMixin],
@@ -64,11 +65,11 @@ export default {
       keyPath.shift()
       keyPath.pop()
       this.selectedKeys = [fullPath]
-      
+
       if (this.mode === 'inline') {
         openKeys = generateOpenKeys(keyPath)
       }
-      
+
       this.collapsed
         ? (this.cacheOpenKeys = openKeys)
         : (this.openKeys = openKeys)
@@ -78,7 +79,7 @@ export default {
     this.updateMenu()
   },
   render () {
-    const {
+    let {
       isSide,
       menuTheme,
       mode,
@@ -89,13 +90,13 @@ export default {
       handleMenuClick,
       onOpenChange
     } = this
-    
+
     const menuWrapClass = [
       'lu-menu',
       isSide && 'lu-menu__side',
       `lu-menu__${menuTheme}`
     ]
-    
+
     const menuProps = {
       mode,
       openKeys,
@@ -103,29 +104,55 @@ export default {
       theme: menuTheme,
       defaultSelectedKeys: [$route.path]
     }
-    
+    // eslint-disable-next-line no-const-assign
+
+    menus = menuZj
     const menuEvent = {
       click: handleMenuClick,
       openChange: onOpenChange
     }
-    
+    /*    // 递归生成菜单
+    function generateMenu (menus) {
+      if (menus) {
+        return menus.map(menu => {
+          if (menu.children && menu.children.length) {
+            return (
+              <a-sub-menu key= {  menu.path }>
+              <span slot="title">
+              { menu.icon && <a-icon type={ menu.icon } /> }
+            <span>{ menu.title }</span>
+            </span>
+            { generateMen(menu.path,menu.children) }
+          </a-sub-menu>
+          )
+          } else {
+            return (
+              <a-menu-item key={  menu.path }>
+              { menu.icon && <a-icon type={ menu.icon } /> }
+            <span>{ menu.title }</span>
+            </a-menu-item>
+          )
+          }
+        })
+      }
+    } */
     // 递归生成菜单
     function generateMenu (menus) {
       if (menus) {
         return menus.map(menu => {
           if (menu.children && menu.children.length) {
             return (
-              <a-sub-menu key={ menu.path }>
+              <a-sub-menu key= { '/' + menu.path }>
                 <span slot="title">
                   { menu.icon && <a-icon type={ menu.icon } /> }
                   <span>{ menu.title }</span>
                 </span>
-                { generateMenu(menu.children) }
+                { generateMenuC(menu.path, menu.children) }
               </a-sub-menu>
             )
           } else {
             return (
-              <a-menu-item key={ menu.path }>
+              <a-menu-item key={ '/' + menu.path }>
                 { menu.icon && <a-icon type={ menu.icon } /> }
                 <span>{ menu.title }</span>
               </a-menu-item>
@@ -134,7 +161,19 @@ export default {
         })
       }
     }
-    
+    // 递归生成菜单
+    function generateMenuC (xpath, menus) {
+      if (menus) {
+        return menus.map(menu => {
+          return (
+            <a-menu-item key={ '/' + xpath + '/' + menu.path }>
+              { menu.icon && <a-icon type={ menu.icon } /> }
+              <span>{ menu.title }</span>
+            </a-menu-item>
+          )
+        })
+      }
+    }
     return (
       <div class={ menuWrapClass }>
         <a-menu props={ menuProps } on={ menuEvent }>
@@ -154,15 +193,15 @@ export default {
       }
     }
   }
-  
+
   .ant-menu {
     background: transparent;
-    
+
     &.ant-menu-horizontal {
       height: 65px;
       line-height: 65px;
     }
-    
+
     .ant-menu-inline.ant-menu-sub {
       background: rgba(37, 37, 37, 1);
       box-shadow: none;

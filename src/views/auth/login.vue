@@ -5,7 +5,7 @@
         <img src="../../assets/images/logo.png" class="logo" alt="背景图">
         <span class="title">VUE-ANTD-PRO</span>
       </div>
-      
+
       <a-form :form="form" class="login-form">
         <a-form-item>
           <a-input
@@ -24,7 +24,7 @@
             <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }" />
           </a-input>
         </a-form-item>
-        
+
         <a-form-item>
           <a-input
             v-decorator="[
@@ -45,7 +45,7 @@
             <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }" />
           </a-input>
         </a-form-item>
-        
+
         <a-form-item>
           <a-col :span="10">
             <a-input
@@ -71,7 +71,7 @@
             <validate-code ref="validate-code" @change="code => validateCode = code"></validate-code>
           </a-col>
         </a-form-item>
-        
+
         <a-form-item style="margin-top:24px;margin-bottom: 0;">
           <a-button
             @click="handleLogin"
@@ -85,7 +85,7 @@
         </a-form-item>
       </a-form>
     </a-card>
-    
+
     <div class="login-footer">
       <layout-footer></layout-footer>
     </div>
@@ -129,7 +129,7 @@ export default {
       this.$nextTick(() => {
         this.$router.push('/')
       })
-      
+
       // 延迟 1 秒显示欢迎信息
       setTimeout(() => {
         this.$notification.success({
@@ -166,28 +166,28 @@ export default {
     background: #f0f2f5 url('../../assets/images/login_bg.png');
     background-size: cover;
     background-repeat: no-repeat;
-    
+
     .logo-wrapper {
       margin-bottom: 38px;
       text-align: center;
       user-select: none;
-      
+
       .logo {
         display: inline-block;
         width: 80px;
         margin-right: 16px;
       }
-      
+
       .title {
         font-size: 32px;
         font-weight: bolder;
         font-family: "Ink Free";
       }
     }
-    
+
     .login-form {
       margin: 0 auto;
-      
+
       .login-button {
         padding: 0 15px;
         font-size: 16px;
@@ -195,7 +195,7 @@ export default {
         width: 100%;
       }
     }
-    
+
     .login-footer {
       position: absolute;
       bottom: 0;

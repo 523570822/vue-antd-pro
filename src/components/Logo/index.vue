@@ -1,7 +1,7 @@
 <template>
   <div :class="['logo-wrapper', `logo-${menuTheme}`, collapsed && 'is-collapsed']">
     <!-- 可根据不同的theme使用不同logo图片 -->
-    <img
+<!--    <img
       v-if="menuTheme === 'dark'"
       class="logo"
       src="../../assets/images/logo.png"
@@ -12,9 +12,9 @@
       class="logo"
       src="../../assets/images/logo.png"
       alt="logo"
-    >
-    <span v-if="layoutMode === 'top' && !isTablat" class="title">VUE-ANTD-PRO</span>
-    <span v-if="layoutMode === 'side' && !collapsed" class="title">VUE-ANTD-PRO</span>
+    >-->
+    <span v-if="layoutMode === 'top' && !isTablat" class="title">xxx驾校系统</span>
+    <span v-if="layoutMode === 'side' && !collapsed" class="title">xxx驾校系统</span>
   </div>
 </template>
 <script>
@@ -41,24 +41,24 @@ export default {
     overflow: hidden;
     user-select: none;
     transition: all 0.3s;
-    
+
     &.is-collapsed {
       padding: 0;
       text-align: center;
     }
-    
+
     &.logo-light {
       .title {
         color: rgba(0, 0, 0, 0.65);
       }
     }
-    
+
     .logo {
       display: inline-block;
       vertical-align: middle;
       width: 45px;
     }
-    
+
     .title {
       display: inline-block;
       vertical-align: middle;
