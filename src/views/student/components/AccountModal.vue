@@ -7,7 +7,7 @@
     :maskClosable="false"
     :keyboard="false"
     :confirmLoading="loading"
-    :width="480"
+    :width="1480"
     :title="account ? '编辑学员' : '新增学员'"
   >
     <a-form :form="form">
@@ -34,7 +34,7 @@
               rules: [ {required: true, message: '请输入支付金额!'} ]
             }
           ]"
-        />
+        /></a-form-item>
         <a-form-item v-bind="formItemLayout" label="总金额">
           <a-input
             v-decorator="[
