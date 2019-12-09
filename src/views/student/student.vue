@@ -124,7 +124,6 @@ const columns = [
     align: 'center'
   },
 
-
   {
     title: '地址',
     dataIndex: 'address',

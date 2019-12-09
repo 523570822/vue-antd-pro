@@ -8,60 +8,128 @@
     :keyboard="false"
     :confirmLoading="loading"
     :width="480"
-    :title="account ? '编辑用户' : '新增用户'"
+    :title="account ? '编辑学员' : '新增学员'"
   >
     <a-form :form="form">
-      <a-form-item v-bind="formItemLayout" label="登录名">
+      <a-form-item v-bind="formItemLayout" label="姓名">
         <a-input
           v-decorator="[
             'username',
             {
               initialValue: account && account.username,
               rules: [
-                { required: true, message: '请输入登录名!' }
+                { required: true, message: '请输入姓名!' }
               ]
             }
           ]"
           :disabled="!!account"
         />
       </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="联系人">
+      <a-form-item v-bind="formItemLayout" label="支付金额">
         <a-input
           v-decorator="[
             'contacts',
             {
               initialValue: account && account.contacts,
-              rules: [ {required: true, message: '请输入联系人!'} ]
+              rules: [ {required: true, message: '请输入支付金额!'} ]
             }
           ]"
         />
+        <a-form-item v-bind="formItemLayout" label="总金额">
+          <a-input
+            v-decorator="[
+            'username',
+            {
+              initialValue: account && account.username,
+              rules: [
+                { required: true, message: '请输入总金额!' }
+              ]
+            }
+          ]"
+            :disabled="!!account"
+          />
       </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="联系人邮箱">
+        <a-form-item v-bind="formItemLayout" label="性别">
+          <a-input
+            v-decorator="[
+            'username',
+            {
+              initialValue: account && account.username,
+              rules: [
+                { required: true, message: '请输入性别!' }
+              ]
+            }
+          ]"
+            :disabled="!!account"
+          />
+        </a-form-item>
+        <a-form-item v-bind="formItemLayout" label="年龄">
+          <a-input
+            v-decorator="[
+            'username',
+            {
+              initialValue: account && account.username,
+              rules: [
+                { required: true, message: '请输入年龄!' }
+              ]
+            }
+          ]"
+            :disabled="!!account"
+          />
+        </a-form-item>
+        <a-form-item v-bind="formItemLayout" label="分期次数">
+          <a-input
+            v-decorator="[
+            'username',
+            {
+              initialValue: account && account.username,
+              rules: [
+                { required: true, message: '分期次数!' }
+              ]
+            }
+          ]"
+            :disabled="!!account"
+          />
+        </a-form-item>
+      <a-form-item v-bind="formItemLayout" label="身份证地址">
+        <a-textarea
+          v-decorator="[
+            'address',
+            {
+              initialValue: account && account.address,
+              rules: [ {required: true, message: '请输入身份证地址!'} ]
+            }
+          ]"
+          :autosize="{ minRows: 2, maxRows: 6 }"
+        />
+      </a-form-item>
+      <a-form-item v-bind="formItemLayout" label="现住址">
+        <a-textarea
+          v-decorator="[
+            'address',
+            {
+              initialValue: account && account.address,
+              rules: [ {required: true, message: '请输入现住址!'} ]
+            }
+          ]"
+          :autosize="{ minRows: 2, maxRows: 6 }"
+        />
+      </a-form-item>
+      <a-form-item v-bind="formItemLayout" label="身份证号">
         <a-input
           v-decorator="[
               'contactsEmail',
               {
                 initialValue: account && account.contactsEmail,
                 rules: [
-                  {required: true, message: '请输入联系人邮箱!'},
+                  {required: true, message: '请输入身份证号!'},
                   {type: 'email', message: '邮箱格式错误！'}
                 ]
               }
             ]"
         />
       </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="地址">
-        <a-textarea
-          v-decorator="[
-            'address',
-            {
-              initialValue: account && account.address,
-              rules: [ {required: true, message: '请输入地址!'} ]
-            }
-          ]"
-          :autosize="{ minRows: 2, maxRows: 6 }"
-        />
-      </a-form-item>
+
       <a-form-item v-bind="formItemLayout" label="角色">
         <a-select
           v-decorator="[
@@ -132,7 +200,7 @@ export default {
     onSubmit () {
       this.form.validateFields((err, values) => {
         if (err) return
-        
+
         this.loading = true
         const params = { ...this.account, ...values }
         if (params.id) {
