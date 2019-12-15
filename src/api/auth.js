@@ -1,7 +1,9 @@
 import request from '@/utils/request'
 
 export function login (params) {
-  return request.get('/login')
+  console.info('最后')
+  console.info(params)
+  return request.post('/login', params)
 }
 
 export function logout () {

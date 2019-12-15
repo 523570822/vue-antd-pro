@@ -6,7 +6,8 @@ import { ACCESS_TOKEN } from '@/store/mutation-types'
 import notification from 'ant-design-vue/es/notification'
 
 // api 配置
-
+// eslint-disable-next-line no-unused-vars
+let api = 'http://localhost:8088/minipro/user'
 let timer = null
 
 const onError = error => {
@@ -29,7 +30,9 @@ const onError = error => {
         description: message
       })
     }
-
+    if (status === 4005) {
+      notification.error({ message: '账号或密码错误', description: message })
+    }
     if (status === 401 && !timer) {
       timer = setTimeout(() => {
         notification.error({
@@ -47,7 +50,7 @@ const onError = error => {
 }
 
 const request = axios.create({
-  baseURL: '/api',
+  baseURL: api,
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json;charset=UTF-8'

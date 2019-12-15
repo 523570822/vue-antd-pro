@@ -139,10 +139,19 @@ export default {
       }, 1000)
     },
     requestFailed (err) {
+      this.loading = false
       this.$refs['validate-code'].draw()
+      // debugger
+
+      let massage = '请求出现错误，请稍后再试'
+      if (err.status === 4005) {
+        massage = '账号或密码错误'
+      }
+      debugger
       this.$notification.error({
+
         message: '错误',
-        description: (err || {}).message || '请求出现错误，请稍后再试',
+        description: (err || {}).message || massage,
         duration: 4
       })
     },

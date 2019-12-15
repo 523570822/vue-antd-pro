@@ -1,7 +1,9 @@
 import { Base64 } from 'js-base64'
 
-const salt1 = 'VUE-ANTD-PRO'
-const salt2 = 'FRONTEND'
+// const salt1 = 'VUE-ANTD-PRO'
+const salt1 = ''
+// const salt2 = 'FRONTEND'
+const salt2 = ''
 
 export function encryptpwd (pwd) {
   return Base64.encode(salt1 + pwd + salt2)
@@ -16,6 +18,6 @@ export function generateOpenKeys (keyPath) {
     }
     openKeys.push(subMenu)
   }
-  
+
   return openKeys
 }

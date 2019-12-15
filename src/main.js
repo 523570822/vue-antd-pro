@@ -8,6 +8,7 @@ import './assets/styles/index.scss'
 
 Vue.config.productionTip = false
 
+Vue.config.devtools = true
 /* 定义全局过滤器 */
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])

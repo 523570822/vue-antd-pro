@@ -2,7 +2,7 @@
   <div>
     <a-card title="学员管理" :bordered="false">
       <div class="table-search-wrapper">
-        <a-form>
+        <a-form  >
           <a-row :gutter="48">
 
             <a-col :md="8" :sm="24">
