@@ -471,9 +471,9 @@ export default {
 
       const list = res.results // 把data里的tableData存到list
       require.ensure([], () => {
-        const tHeader = ['序号', '姓名', '手机号', '性别', '年龄', '身份证号', '状态', '下次考试时间', '手续']
+        const tHeader = ['序号', '姓名', '手机号', '性别', '出生年月', '身份证号', '状态', '下次考试时间', '手续', '户口所在地']
         // 上面设置Excel的表格第一行的标题
-        const filterVal = ['id', 'username', 'phone', 'sex', 'age', 'idCard', 'status', 'nextTime', 'formalities']
+        const filterVal = ['id', 'username', 'phone', 'sex', 'birthday', 'idCard', 'status', 'nextTime', 'formalities', 'address']
         // 上面的index、nickName、name是tableData里对象的属性
 
         for (let i = 0; i < list.length; i++) {
@@ -484,15 +484,15 @@ export default {
             list[i].sex = '女'
           }
           list[i].nextTime = formatDate(new Date(list[i].nextTime), 'yyyy-MM-dd_hh:mm')
-          if (list[i].status === 1) {
+          if (list[i].status === '1') {
             list[i].status = '科目一'
-          } else if (list[i].status === 2) {
+          } else if (list[i].status === '2') {
             list[i].status = '科目二'
-          } else if (list[i].status === 3) {
+          } else if (list[i].status === '3') {
             list[i].status = '科目三'
-          } else if (list[i].status === 4) {
+          } else if (list[i].status === '4') {
             list[i].status = '科目四'
-          } else if (list[i].status === 5) {
+          } else if (list[i].status === '5') {
             list[i].status = '完成考试'
           }
           list[i].name = list[i].lastname + '对的'
