@@ -13,8 +13,8 @@
       src="../../assets/images/logo.png"
       alt="logo"
     >-->
-    <span v-if="layoutMode === 'top' && !isTablat" class="title">xxx驾校系统</span>
-    <span v-if="layoutMode === 'side' && !collapsed" class="title">xxx驾校系统</span>
+    <span v-if="layoutMode === 'top' && !isTablat" class="title">霏霖驾校系统</span>
+    <span v-if="layoutMode === 'side' && !collapsed" class="title">霏霖驾校系统</span>
   </div>
 </template>
 <script>

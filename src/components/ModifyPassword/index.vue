@@ -78,9 +78,10 @@ export default {
       const { getFieldValue } = this.form
       this.form.validateFields(async (err, form) => {
         if (err) return
-        
+
         this.loading = true
         const params = {}
+
         params.password = getFieldValue('password')
         params.newPassword = getFieldValue('newPassword')
         const res = await modifyPassword(params)

@@ -7,7 +7,7 @@ import notification from 'ant-design-vue/es/notification'
 
 // api 配置
 // eslint-disable-next-line no-unused-vars
-let api = 'http://localhost:8088/minipro'
+let api = 'http://114.116.106.203/studentapi/minipro'
 let timer = null
 
 const onError = error => {

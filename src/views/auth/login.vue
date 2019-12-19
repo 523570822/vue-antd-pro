@@ -2,8 +2,8 @@
   <div class="login">
     <a-card style="width: 460px;" :body-style="{padding: '84px 64px'}">
       <div class="logo-wrapper">
-        <img src="../../assets/images/logo.png" class="logo" alt="背景图">
-        <span class="title">VUE-ANTD-PRO</span>
+        <!--<img src="../../assets/images/logo.png" class="logo" alt="背景图">-->
+        <span class="title">霏霖驾校</span>
       </div>
 
       <a-form :form="form" class="login-form">
