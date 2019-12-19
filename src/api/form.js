@@ -9,6 +9,9 @@ export function getStudent (params) {
 export function passExam (params) {
   return request.post(`/student/passExam`, params)
 }
+export function nopassExam (params) {
+  return request.post(`/student/nopassExam`, params)
+}
 export function deleteAccount (id) {
   return request.delete(`/student/students/${id}`)
 }

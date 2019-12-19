@@ -81,7 +81,6 @@
         <a-button @click="onCreate" class="btn-item" type="primary">新增</a-button>
         <a-button @click="exportExcel" class="btn-item" type="primary">导出</a-button>
       <div  :style="{ float: 'right', overflow: 'hidden' }"> 总金额：{{total}}元 &nbsp;&nbsp;   总支付金额:{{payment}}元&nbsp;&nbsp;       未支付总额{{total-payment}}元 </div>
-st
       </div>
 
       <a-table
@@ -122,6 +121,8 @@ st
           <span v-if="record.status < 5">
           <a @click="showConfirm(record)" href="javascript:0;">通过</a>
             <a-divider type="vertical" />
+             <a @click="showNoConfirm(record)" href="javascript:0;">不通过</a>
+            <a-divider type="vertical" />
           </span>
 
           <span v-if="record.payment < record.totalAmount">
@@ -146,7 +147,7 @@ st
 import { queryFormMixin, tableMixin, rangePickerMixin } from '@/mixins'
 import AccountModal from './components/AccountModal'
 import AddPaymentModal from './components/AddPaymentModal'
-import { deleteAccount, getRoles, getStudent, passExam } from '@/api/form'
+import { deleteAccount, getRoles, getStudent, passExam, nopassExam } from '@/api/form'
 
 const columns = [
   {
@@ -353,13 +354,35 @@ export default {
         this.openNotification1()
       }
     },
+    async nopassExam1 (row) {
+      const self1 = this
+
+      const res111 = await nopassExam({ id: row.id })
+      if (res111.code === 0) {
+        self1.openNotification()
+        self1.search()
+      } else {
+        this.openNotification1()
+      }
+    },
     showConfirm (row) {
       const _this = this
       _this.$confirm({
-        title: ' 该学员时候通过(科目' + row.status + ')的考试',
+        title: ' 该学员是否通过(科目' + row.status + ')的考试',
         content: '确定后通过并产生下一科目的时间',
         onOk () {
           _this.passExam1(row)
+        },
+        onCancel () {}
+      })
+    },
+    showNoConfirm (row) {
+      const _this = this
+      _this.$confirm({
+        title: ' 该学员是否没有通过(科目' + row.status + ')的考试',
+        content: '确定后通过重新分配科目考试的时间',
+        onOk () {
+          _this.nopassExam1(row)
         },
         onCancel () {}
       })
@@ -408,9 +431,9 @@ export default {
       require.ensure([], () => {
         const { exportJsonToExcel } = require('../../excel/Export2Excel')
         const { formatDate } = require('../../utils/date')
-        const tHeader = ['序号', '姓名', '性别', '年龄', '身份证号', '状态', '下次考试时间']
+        const tHeader = ['序号', '姓名', '手机号', '性别', '年龄', '身份证号', '状态', '下次考试时间']
         // 上面设置Excel的表格第一行的标题
-        const filterVal = ['id', 'username', 'sex', 'age', 'idCard', 'status', 'nextTime']
+        const filterVal = ['id', 'username', 'phone', 'sex', 'age', 'idCard', 'status', 'nextTime']
         // 上面的index、nickName、name是tableData里对象的属性
         const list = this.tableData // 把data里的tableData存到list
         for (let i = 0; i < list.length; i++) {

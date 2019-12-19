@@ -7,7 +7,7 @@ function resolve (dir) {
 
 // vue.config.js
 module.exports = {
-  publicPath: '/',
+  publicPath: '/student/',
 
   transpileDependencies: ['resize-detector', 'ant-design-vue'],
 

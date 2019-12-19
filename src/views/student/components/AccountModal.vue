@@ -126,6 +126,64 @@
 
             />
           </a-form-item>
+          <a-form-item v-bind="formItemLayout" label="手机号">
+            <a-input
+              v-decorator="[
+            'phone',
+            {
+              initialValue: account && account.phone,
+              rules: [
+                { required: true, message: '请输入手机号!' }
+
+              ]
+            }
+          ]"
+
+            />
+          </a-form-item>
+          <a-form-item v-bind="formItemLayout" label="性别">
+            <a-select
+              v-decorator="[
+            'sex',
+            {
+              initialValue: account && account.sex,
+              rules: [ {required: true, message: '请选择角色!'} ]
+            }
+          ]"
+
+            >
+              <a-select-option value="0">女</a-select-option>
+              <a-select-option value="1">男</a-select-option>
+            </a-select>
+
+          </a-form-item>
+          <a-form-item v-bind="formItemLayout" label="科目">
+            <a-select
+              v-decorator="[
+            'status',
+            {
+              initialValue: account && account.status,
+              rules: [ {required: true, message: '请选择科目!'} ]
+            }
+          ]"
+            >
+              <a-select-option value="1" >科目一</a-select-option>
+              <a-select-option value="2">科目二</a-select-option>
+              <a-select-option value="3">科目三</a-select-option>
+              <a-select-option value="4">科目四</a-select-option>
+              <a-select-option value="0">未通过考试</a-select-option>
+              <a-select-option value="5">通过所有考试</a-select-option>
+            </a-select>
+
+          </a-form-item>
+
+          <a-form-item v-bind="formItemLayout" label="下次考试时间">
+            <span  v-if="account.nextTime!=null">
+            <a-date-picker
+              :defaultValue="moment(account.nextTime, dateFormat)" :format="dateFormat"
+            />
+               </span>
+          </a-form-item>
       <a-form-item v-bind="formItemLayout" label="身份证地址">
         <a-textarea
           v-decorator="[
@@ -135,19 +193,20 @@
               rules: [ {required: false, message: '请输入身份证地址!'} ]
             }
           ]"
-          :autosize="{ minRows: 2, maxRows: 25 }"
+          :autosize="{ minRows: 2, maxRows: 30 }"
         />
       </a-form-item>
       <a-form-item v-bind="formItemLayout" label="现住址">
         <a-textarea
           v-decorator="[
-            'residentiAlddress',
+
+            'residentialAddress',
             {
-              initialValue: account && account.residentiAlddress,
+              initialValue: account && account.residentialAddress,
               rules: [ {required: false, message: '请输入现住址!'} ]
             }
           ]"
-          :autosize="{ minRows: 2, maxRows: 6 }"
+          :autosize="{ minRows: 2, maxRows: 28 }"
         />
       </a-form-item>
         </a-col>
@@ -159,7 +218,7 @@
 <script>
 import { createAccount, modifyAccount, getRoles } from '@/api/form'
 import ATextarea from 'ant-design-vue/es/input/TextArea'
-
+import moment from 'moment'
 export default {
   components: { ATextarea },
   props: {
@@ -174,6 +233,7 @@ export default {
       form: this.$form.createForm(this),
       roleOptions: [],
       loading: false,
+      dateFormat: 'YYYY-MM-DD',
       formItemLayout: {
 
         labelCol: { span: 5 },
@@ -187,6 +247,7 @@ export default {
     }
   },
   methods: {
+    moment,
     async handleCreateAccount (params) {
       await createAccount(params)
       this.loading = false

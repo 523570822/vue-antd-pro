@@ -12,7 +12,7 @@ const whiteList = ['login', '404'] // no redirect whitelist
 
 export const createRouter = () =>
   new Router({
-    mode: 'history',
+    // mode: 'history',
     base: process.env.BASE_URL,
     routes
   })

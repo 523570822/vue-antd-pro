@@ -96,6 +96,7 @@ export default {
             }
           })
         } else {
+          this.loading = false
           this.$message.error(res.message)
         }
       })
