@@ -9,7 +9,7 @@
     :keyboard="false"
     :confirmLoading="loading"
     :width="1000"
-    :title="account ? '编辑学员' : '新增学员'"
+    :title="account!=null&&account.id!=null ? '编辑学员' : '新增学员'"
   >
     <a-form id="components-form-demo-advanced-search" :form="form"   class="ant-advanced-search-form"  >
       <a-row :gutter="24">
@@ -48,12 +48,12 @@
           </a-select>
 
         </a-form-item>
-        <a-form-item v-bind="formItemLayout" label="年龄">
+        <a-form-item v-bind="formItemLayout" label="出生日期">
           <a-input
             v-decorator="[
-            'age',
+            'birthday',
             {
-              initialValue: account && account.age,
+              initialValue: account && account.birthday,
               rules: [
                 { required: false, message: '请输入年龄!' },
                   { pattern: /^[0-9]{1,10}$/g, message: '请输入数字' },
@@ -103,8 +103,21 @@
               ]
             }
           ]"
+            />  </a-form-item>
+            <a-form-item v-bind="formItemLayout" label="手续">
+              <a-input
+                v-decorator="[
+            'formalities',
+            {
+              initialValue: account && account.formalities,
+              rules: [
+                { required: false, message: '手续!' },
 
-            />
+              ]
+            }
+          ]"
+
+              />
           </a-form-item>
         </a-col>
         <a-col
@@ -126,36 +139,17 @@
 
             />
           </a-form-item>
-          <a-form-item v-bind="formItemLayout" label="手机号">
-            <a-input
+          <a-form-item v-bind="formItemLayout" label="身份证地址">
+            <a-textarea
               v-decorator="[
-            'phone',
+            'address',
             {
-              initialValue: account && account.phone,
-              rules: [
-                { required: true, message: '请输入手机号!' }
-
-              ]
+              initialValue: account && account.address,
+              rules: [ {required: false, message: '请输入身份证地址!'} ]
             }
           ]"
-
+              :autosize="{ minRows: 2, maxRows: 30 }"
             />
-          </a-form-item>
-          <a-form-item v-bind="formItemLayout" label="性别">
-            <a-select
-              v-decorator="[
-            'sex',
-            {
-              initialValue: account && account.sex,
-              rules: [ {required: true, message: '请选择角色!'} ]
-            }
-          ]"
-
-            >
-              <a-select-option value="0">女</a-select-option>
-              <a-select-option value="1">男</a-select-option>
-            </a-select>
-
           </a-form-item>
           <a-form-item v-bind="formItemLayout" label="科目">
             <a-select
@@ -176,26 +170,32 @@
             </a-select>
 
           </a-form-item>
-
-          <a-form-item v-bind="formItemLayout" label="下次考试时间">
-            <span  v-if="account!=null">
-            <a-date-picker
-              :defaultValue="moment(account.nextTime, dateFormat)" :format="dateFormat"
-            />
-               </span>
-          </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="身份证地址">
-        <a-textarea
-          v-decorator="[
-            'address',
+          <a-form-item v-bind="formItemLayout" label="手机号">
+            <a-input
+              v-decorator="[
+            'phone',
             {
-              initialValue: account && account.address,
-              rules: [ {required: false, message: '请输入身份证地址!'} ]
+              initialValue: account && account.phone,
+              rules: [
+                { required: true, message: '请输入手机号!' }
+
+              ]
             }
           ]"
-          :autosize="{ minRows: 2, maxRows: 30 }"
-        />
-      </a-form-item>
+
+            />
+          </a-form-item>
+
+          <a-form-item v-bind="formItemLayout" label="下次考试时间">
+            <span  v-if="account!=null&&account.nextTime!=null">
+            <a-date-picker
+              :defaultValue="moment(account.nextTime, dateFormat)" :format="dateFormat"
+            /></span>
+            <span  v-if="account==null||account.nextTime==null">
+            <a-date-picker/>
+               </span>
+          </a-form-item>
+
       <a-form-item v-bind="formItemLayout" label="现住址">
         <a-textarea
           v-decorator="[
@@ -211,6 +211,7 @@
       </a-form-item>
         </a-col>
       </a-row>
+   <a-button @click="blandKa">读卡</a-button>
     </a-form>
   </a-modal>
 </template>
@@ -235,7 +236,6 @@ export default {
       loading: false,
       dateFormat: 'YYYY-MM-DD',
       formItemLayout: {
-
         labelCol: { span: 5 },
         wrapperCol: { span: 18 }
       }
@@ -276,6 +276,37 @@ export default {
     async queryRoles () {
       const res = await getRoles()
       this.roleOptions = res
+    },
+    async blandKa () {
+      this.$parent.onCreate()
+      /*      const res111 = await bland()
+      console.info('获取信息')
+      // eslint-disable-next-line no-invalid-regexp
+      console.info(res111.data.ret)
+      if (res111.data.ret === undefined) {
+        let newMsg = res111.data.replace(/\\/g, '\\\\')
+        let json = JSON.parse(newMsg)
+
+        if (json.ret === 0) {
+          if (json.Certificate.Sex === '男') {
+            json.Certificate.Sex = '1'
+          } else if (json.Certificate.Sex === '女') {
+            json.Certificate.Sex = '0'
+          }
+
+           this.account = {
+            username: json.Certificate.Name,
+            sex: json.Certificate.Sex,
+            birthday: json.Certificate.Birthday,
+            idCard: json.Certificate.IDNumber,
+            status: '1',
+            address: json.Certificate.Address
+          }
+        } else {
+
+        }
+        console.info('获取信息')
+      } */
     },
     closeModal (isRefresh) {
       this.form.resetFields()

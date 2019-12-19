@@ -15,6 +15,7 @@
                 <a-select
                   v-model="form.declareStatus"
                   allowClear
+
                   placeholder="请选择"
                 >
                   <a-select-option :value="0">没有通过</a-select-option>
@@ -90,6 +91,7 @@
         :pagination="pagination"
         :loading="tableLoading"
         @change="handleTableChange"
+        :rowSelection="rowSelection"
         :scroll="{ x: 500 }"
       >
         <span slot="serial" slot-scope="text, record, index">{{ serial + index + 1 }}</span>
@@ -147,8 +149,9 @@
 import { queryFormMixin, tableMixin, rangePickerMixin } from '@/mixins'
 import AccountModal from './components/AccountModal'
 import AddPaymentModal from './components/AddPaymentModal'
-import { deleteAccount, getRoles, getStudent, passExam, nopassExam } from '@/api/form'
-
+import { deleteAccount, getRoles, getStudent, passExam, nopassExam, getExcle, bland } from '@/api/form'
+import { exportJsonToExcel } from '../../excel/Export2Excel'
+import { formatDate } from '../../utils/date'
 const columns = [
   {
     title: '#',
@@ -170,15 +173,15 @@ const columns = [
     align: 'center'
   },
   {
-    title: '年龄',
-    dataIndex: 'age',
+    title: '出生日期',
+    dataIndex: 'birthday',
     align: 'center'
   },
-  {
+  /* {
     title: '身份证号',
     dataIndex: 'idCard',
     align: 'center'
-  },
+  }, */
   {
     title: '总金额',
     dataIndex: 'totalAmount',
@@ -200,17 +203,23 @@ const columns = [
     dataIndex: 'numberStages',
     align: 'center'
   },
-  {
+  /*  {
     title: '地址',
     dataIndex: 'address',
     width: 200,
     align: 'center'
-  },
+  }, */
 
   {
     title: '状态',
     dataIndex: 'status',
     scopedSlots: { customRender: 'status' },
+    align: 'center'
+  },
+  {
+    title: '手续',
+    dataIndex: 'formalities',
+    scopedSlots: { customRender: 'formalities' },
     align: 'center'
   },
   {
@@ -220,13 +229,13 @@ const columns = [
     width: 160,
     align: 'center'
   },
-  {
+  /* {
     title: '更新时间',
     dataIndex: 'updateTime',
     scopedSlots: { customRender: 'updateTime' },
     width: 160,
     align: 'center'
-  },
+  }, */
   {
     title: '操作',
     scopedSlots: { customRender: 'actions' },
@@ -257,7 +266,6 @@ export default {
       form: {},
       // 当前选中行
       selectedRowKeys: [],
-
       // 角色下拉框 备选项
       roleOptions: [],
       visibleAccount: false,
@@ -299,7 +307,6 @@ export default {
 
       this.rows = res.results.student.records
       this.total = res.results.tongJi.total
-      this.tableData = res.results.tableData
       this.payment = res.results.tongJi.payment
       this.pagination.total = res.results.student.total
       this.tableLoading = false
@@ -328,7 +335,35 @@ export default {
       this.pagination.current = 1
       this.search()
     },
-    onCreate () {
+    async onCreate () {
+      const res111 = await bland()
+      console.info('获取信息')
+      // eslint-disable-next-line no-invalid-regexp
+      console.info(res111.data.ret)
+      if (res111.data.ret === undefined) {
+        let newMsg = res111.data.replace(/\\/g, '\\\\')
+        let json = JSON.parse(newMsg)
+
+        if (json.ret === 0) {
+          if (json.Certificate.Sex === '男') {
+            json.Certificate.Sex = '1'
+          } else if (json.Certificate.Sex === '女') {
+            json.Certificate.Sex = '0'
+          }
+          this.currentAccount = {
+            username: json.Certificate.Name,
+            sex: json.Certificate.Sex,
+            birthday: json.Certificate.Birthday,
+            idCard: json.Certificate.IDNumber,
+            status: '1',
+            address: json.Certificate.Address
+          }
+        } else {
+
+        }
+        console.info('获取信息')
+      }
+
       this.visible = true
     },
     addPayment (row) {
@@ -427,15 +462,20 @@ export default {
       this.visibleAccount = false
     },
     // 导出的方法
-    exportExcel () {
+    async exportExcel () {
+      let keys = this.selectedRowKeys
+      const res = await getExcle({
+        ...this.form,
+        keys
+      })
+
+      const list = res.results // 把data里的tableData存到list
       require.ensure([], () => {
-        const { exportJsonToExcel } = require('../../excel/Export2Excel')
-        const { formatDate } = require('../../utils/date')
-        const tHeader = ['序号', '姓名', '手机号', '性别', '年龄', '身份证号', '状态', '下次考试时间']
+        const tHeader = ['序号', '姓名', '手机号', '性别', '年龄', '身份证号', '状态', '下次考试时间', '手续']
         // 上面设置Excel的表格第一行的标题
-        const filterVal = ['id', 'username', 'phone', 'sex', 'age', 'idCard', 'status', 'nextTime']
+        const filterVal = ['id', 'username', 'phone', 'sex', 'age', 'idCard', 'status', 'nextTime', 'formalities']
         // 上面的index、nickName、name是tableData里对象的属性
-        const list = this.tableData // 把data里的tableData存到list
+
         for (let i = 0; i < list.length; i++) {
           /* 如要导出名字，则自定义name属性 */
           if (list[i].sex === '1') {

@@ -1,21 +1,16 @@
-import Vue from 'vue'
-import store from '@/store/index'
-import router from '@/router'
 import axios from 'axios'
-import { ACCESS_TOKEN } from '@/store/mutation-types'
 import notification from 'ant-design-vue/es/notification'
 
 // api 配置
 // let api = 'http://114.116.106.203/studentapi/minipro'
 // let api = 'http://127.0.0.1:8088/minipro'
-let api = 'http://127.0.0.1:8088/minipro'
+let api = 'http://127.0.0.1:24010/ZKIDROnline'
 let timer = null
 
 const onError = error => {
   if (error.response) {
     const status = error.response.status
     const message = error.response.statusText
-    const token = Vue.ss.get(ACCESS_TOKEN)
 
     if (status === 403) {
       notification.error({ message: '禁止访问', description: message })
@@ -40,9 +35,6 @@ const onError = error => {
           message: '未授权',
           description: '授权失败，请重新登录'
         })
-        if (token) {
-          store.dispatch('user/Logout').then(() => router.replace('/login'))
-        }
         timer = null
       }, 500)
     }
@@ -50,18 +42,14 @@ const onError = error => {
   return Promise.reject(error)
 }
 
-const request = axios.create({
+const requestBland = axios.create({
   baseURL: api,
-  timeout: 5000,
+  timeout: 15000,
   headers: {
     'Content-Type': 'application/json;charset=UTF-8'
   },
   transformRequest: [
     function (data, headers) {
-      const token = Vue.ss.get(ACCESS_TOKEN)
-      if (token) {
-        headers[ACCESS_TOKEN] = 'Bearer ' + token
-      }
       if (headers['Content-Type'] === 'multipart/form-data') {
         return data
       } else {
@@ -72,7 +60,7 @@ const request = axios.create({
 })
 
 // 请求拦截器
-request.interceptors.request.use(
+requestBland.interceptors.request.use(
   config => {
     // 开发环境下，如果请求是 post,put,patch,则打印数据体，方便调试
     if (process.env.NODE_ENV === 'development') {
@@ -94,7 +82,7 @@ request.interceptors.request.use(
 )
 
 // 响应拦截器
-request.interceptors.response.use(res => {
+requestBland.interceptors.response.use(res => {
   console.log(res)
   const jsonPattern = /application\/json/gi
   if (jsonPattern.test(res.headers['content-type'])) {
@@ -104,4 +92,4 @@ request.interceptors.response.use(res => {
   }
 }, onError)
 
-export default request
+export default requestBland
