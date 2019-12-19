@@ -147,7 +147,7 @@ export default {
       if (err.status === 4005) {
         massage = '账号或密码错误'
       }
-      debugger
+      // debugger
       this.$notification.error({
 
         message: '错误',

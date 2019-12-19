@@ -8,15 +8,10 @@
     :maskClosable="false"
     :keyboard="false"
     :confirmLoading="loading"
-    :width="1000"
-    :title="account ? '编辑学员' : '新增学员'"
+    :width="500"
+    :title="'学员还款'"
   >
-    <a-form id="components-form-demo-advanced-search" :form="form"   class="ant-advanced-search-form"  >
-      <a-row :gutter="24">
-        <a-col
-          :span="12"
-          :style="{ display: 'block' }"
-        >
+    <a-form id="components-form-paymentModal-advanced-search" :form="form"   class="ant-advanced-search-form"  >
       <a-form-item v-bind="formItemLayout" label="姓名">
         <a-input
           v-decorator="[
@@ -31,50 +26,16 @@
           :disabled="!!account"
         />
       </a-form-item>
-
-        <a-form-item v-bind="formItemLayout" label="性别">
-          <a-select
-            v-decorator="[
-            'sex',
-            {
-              initialValue: account && account.sex,
-              rules: [ {required: true, message: '请选择角色!'} ]
-            }
-          ]"
-
-          >
-            <a-select-option value="0">女</a-select-option>
-            <a-select-option value="1">男</a-select-option>
-          </a-select>
-
-        </a-form-item>
-        <a-form-item v-bind="formItemLayout" label="年龄">
-          <a-input
-            v-decorator="[
-            'age',
-            {
-              initialValue: account && account.age,
-              rules: [
-                { required: false, message: '请输入年龄!' },
-                  { pattern: /^[0-9]{1,10}$/g, message: '请输入数字' },
-              ]
-            }
-          ]"
-
-          />
-        </a-form-item>
           <a-form-item v-bind="formItemLayout" label="支付金额" >
             <a-input
               v-decorator="[
             'payment',
             {
               initialValue: account && account.payment,
-              rules: [
-                {required: false, message: '请输入支付金额!'} ,
-                  { pattern: /^[0-9]{1,10}$/g, message: '请输入数字' }
-                  ]
+              rules: [ {required: false, message: '请输入支付金额!'} ]
             }
           ]"
+              :disabled="!!account"
             /></a-form-item>
           <a-form-item v-bind="formItemLayout" label="总金额">
             <a-input
@@ -83,12 +44,11 @@
             {
               initialValue: account && account.totalAmount,
               rules: [
-                { required: false, message: '请输入总金额!' },
-                  { pattern: /^[0-9]{1,10}$/g, message: '请输入数字' },
+                { required: false, message: '请输入总金额!' }
               ]
             }
           ]"
-
+              :disabled="!!account"
             />
           </a-form-item>
           <a-form-item v-bind="formItemLayout" label="分期次数">
@@ -98,73 +58,41 @@
             {
               initialValue: account && account.numberStages,
               rules: [
-                { required: false, message: '分期次数!' },
-                  { pattern: /^[0-9]{1,10}$/g, message: '请输入数字' }
+                { required: false, message: '分期次数!' }
               ]
             }
           ]"
-
+              :disabled="!!account"
             />
           </a-form-item>
-        </a-col>
-        <a-col
-          :span="12"
-          :style="{ display: 'block' }"
-        >
-          <a-form-item v-bind="formItemLayout" label="身份证号">
-            <a-input
-              v-decorator="[
-            'idCard',
+            <a-form-item v-bind="formItemLayout" label="还款金额">
+              <a-input
+                v-decorator="[
+            'repaymentAmount',
             {
-              initialValue: account && account.idCard,
+              initialValue: account && account.repaymentAmount,
               rules: [
-                { required: true, message: '请输入身份证号!' }
-
+                { required: true, message: '请输入还款金额!' },
+                { pattern: /^[0-9]{1,10}$/g, message: '金额必须为10位以内的数字' },
               ]
             }
           ]"
+              />
+            </a-form-item>
 
-            />
-          </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="身份证地址">
-        <a-textarea
-          v-decorator="[
-            'address',
-            {
-              initialValue: account && account.address,
-              rules: [ {required: false, message: '请输入身份证地址!'} ]
-            }
-          ]"
-          :autosize="{ minRows: 2, maxRows: 25 }"
-        />
-      </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="现住址">
-        <a-textarea
-          v-decorator="[
-            'residentiAlddress',
-            {
-              initialValue: account && account.residentiAlddress,
-              rules: [ {required: false, message: '请输入现住址!'} ]
-            }
-          ]"
-          :autosize="{ minRows: 2, maxRows: 6 }"
-        />
-      </a-form-item>
-        </a-col>
-      </a-row>
     </a-form>
   </a-modal>
 </template>
 
 <script>
-import { createAccount, modifyAccount, getRoles } from '@/api/form'
-import ATextarea from 'ant-design-vue/es/input/TextArea'
+import { createAccount, modifyPayment, getRoles } from '@/api/form'
 
 export default {
-  components: { ATextarea },
+  components: { },
   props: {
     visible: {
       type: Boolean,
+      // default:false,
       required: true
     },
     account: Object
@@ -175,7 +103,6 @@ export default {
       roleOptions: [],
       loading: false,
       formItemLayout: {
-
         labelCol: { span: 5 },
         wrapperCol: { span: 18 }
       }
@@ -194,9 +121,9 @@ export default {
       this.closeModal(true)
     },
     async handleModifyAccount (params) {
-      await modifyAccount(params)
+      await modifyPayment(params)
       this.loading = false
-      this.$message.success('编辑成功')
+      this.$message.success('还款成功')
       this.closeModal(true)
     },
     onSubmit () {
@@ -242,10 +169,10 @@ export default {
     flex: 1;
   }
 
-  #components-form-demo-advanced-search .ant-form {
+  #components-form-paymentModal-advanced-search .ant-form {
     max-width: none;
   }
-  #components-form-demo-advanced-search .search-result-list {
+  #components-form-paymentModal-advanced-search .search-result-list {
     margin-top: 16px;
     border: 1px dashed #e9e9e9;
     border-radius: 6px;

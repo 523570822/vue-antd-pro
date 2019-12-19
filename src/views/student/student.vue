@@ -10,27 +10,45 @@
                 <a-input v-model="form.contacts" />
               </a-form-item>
             </a-col>
+            <a-col :md="8" :sm="24">
+              <a-form-item label="状态" v-bind="formItemLayout">
+                <a-select
+                  v-model="form.declareStatus"
+                  allowClear
+                  placeholder="请选择"
+                >
+                  <a-select-option :value="0">没有通过</a-select-option>
+                  <a-select-option :value="1">科目一</a-select-option>
+                  <a-select-option :value="2">科目二</a-select-option>
+                  <a-select-option :value="3">科目三</a-select-option>
+                  <a-select-option :value="4">科目四</a-select-option>
+                  <a-select-option :value="5">通过考试</a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
             <template v-if="!formFold">
             <!--  <a-col :md="8" :sm="24">
                 <a-form-item label="角色" v-bind="formItemLayout">
                   <a-select v-model="form.customsId" :options="roleOptions" allowClear placeholder="请选择"></a-select>
                 </a-form-item>
               </a-col>-->
-              <a-col :md="8" :sm="24">
+             <!-- <a-col :md="8" :sm="24">
                 <a-form-item label="状态" v-bind="formItemLayout">
                   <a-select
                     v-model="form.declareStatus"
                     allowClear
                     placeholder="请选择"
                   >
+                    <a-select-option :value="0">没有通过</a-select-option>
                     <a-select-option :value="1">科目一</a-select-option>
                     <a-select-option :value="2">科目二</a-select-option>
                     <a-select-option :value="3">科目三</a-select-option>
                     <a-select-option :value="4">科目四</a-select-option>
+                    <a-select-option :value="5">通过考试</a-select-option>
                   </a-select>
                 </a-form-item>
-              </a-col>
-              <a-col :md="8" :sm="24">
+              </a-col>-->
+            <!--  <a-col :md="8" :sm="24">
                 <a-form-item label="更新时间" v-bind="formItemLayout">
                   <a-range-picker
                     v-model="rangeDate"
@@ -40,7 +58,7 @@
                     style="width: 100%;"
                   ></a-range-picker>
                 </a-form-item>
-              </a-col>
+              </a-col>-->
             </template>
             <a-col :md="formFold && 8 || 24" :sm="24">
               <span
@@ -49,10 +67,10 @@
               >
                 <a-button type="primary" icon="search" @click="handleSearch">查询</a-button>
                 <a-button icon="sync" @click="handleResetForm" style="margin-left: 8px">重置</a-button>
-                <a @click="toggleFold" style="margin-left: 8px">
+             <!--   <a @click="toggleFold" style="margin-left: 8px">
                   {{ formFold ? '展开' : '收起' }}
                   <a-icon :type="formFold ? 'down' : 'up'" />
-                </a>
+                </a>-->
               </span>
             </a-col>
           </a-row>
@@ -61,31 +79,55 @@
 
       <div class="operate-wrapper">
         <a-button @click="onCreate" class="btn-item" type="primary">新增</a-button>
+        <a-button @click="exportExcel" class="btn-item" type="primary">导出</a-button>
+      <div  :style="{ float: 'right', overflow: 'hidden' }"> 总金额：{{total}}元 &nbsp;&nbsp;   总支付金额:{{payment}}元&nbsp;&nbsp;       未支付总额{{total-payment}}元 </div>
+st
       </div>
 
       <a-table
         :columns="columns"
         :dataSource="rows"
-        :rowSelection="rowSelection"
         rowKey="id"
         :pagination="pagination"
         :loading="tableLoading"
         @change="handleTableChange"
-        :scroll="{ x: 1500 }"
+        :scroll="{ x: 500 }"
       >
         <span slot="serial" slot-scope="text, record, index">{{ serial + index + 1 }}</span>
 
-        <span slot="role" slot-scope="roleId">{{ roleId | roleFilter(roleOptions) }}</span>
+      <!--  <span slot="role" slot-scope="roleId">{{ roleId | roleFilter(roleOptions) }}</span>-->
 
-        <span slot="status" slot-scope="status">{{ status === 1 ? '科目1' : '科目2' }}</span>
-
-        <span slot="updateTime" slot-scope="updateTime">
-          {{ new Date(updateTime) | formatDate('yyyy-MM-dd hh:mm:ss') }}
+        <span slot="status" slot-scope="status">
+          <span v-if="status==0"> 未通过考试</span>
+          <span v-if="status==1">科目一</span>
+           <span v-if="status==2">科目二</span>
+           <span v-if="status==3">科目三</span>
+           <span v-if="status==4">科目四</span>
+            <span v-if="status==5">通过所有考试</span>
         </span>
-
+        <span slot="sexT" slot-scope="sex">
+             <span v-if="sex==0"> 女</span>
+          <span v-if="sex==1">男</span>
+        </span>
+        <span slot="nextTime" slot-scope="nextTime">
+          {{ new Date(nextTime) | formatDate('yyyy-MM-dd ') }}
+        </span>
+        <span slot="updateTime" slot-scope="updateTime">
+          {{ new Date(updateTime) | formatDate('yyyy-MM-dd hh:mm') }}
+        </span>
+       <span slot="daiHuanKuan" slot-scope="record">
+          {{record.totalAmount-record.payment>0?record.totalAmount-record.payment:0}}
+        </span>
         <div slot="actions" slot-scope="record">
-          <a @click="onEdit(record)" href="javascript:0;">通过</a>
-          <a-divider type="vertical" />
+          <span v-if="record.status < 5">
+          <a @click="showConfirm(record)" href="javascript:0;">通过</a>
+            <a-divider type="vertical" />
+          </span>
+
+          <span v-if="record.payment < record.totalAmount">
+          <a @click="showPayment(record)" href="javascript:0;">还款</a>
+            <a-divider type="vertical" />
+          </span>
           <a @click="onEdit(record)" href="javascript:0;">编辑</a>
           <a-divider type="vertical" />
           <a @click="onDelete(record.id)" href="javascript:0;">删除</a>
@@ -95,14 +137,16 @@
     </a-card>
 
     <!--新增/修改用户-->
-    <account-modal :visible="visible" :account="currentAccount" @close="onModalClose" />
+    <account-modal      :visible="visible"            :account="currentAccount" @close="onModalClose" />
+    <add-payment-modal :visible="visibleAccount" :account="currentAccount" @close="onModalAccountClose" />
   </div>
 </template>
 
 <script>
 import { queryFormMixin, tableMixin, rangePickerMixin } from '@/mixins'
 import AccountModal from './components/AccountModal'
-import { getUsers, deleteAccount, getRoles } from '@/api/form'
+import AddPaymentModal from './components/AddPaymentModal'
+import { deleteAccount, getRoles, getStudent, passExam } from '@/api/form'
 
 const columns = [
   {
@@ -115,15 +159,46 @@ const columns = [
 
   {
     title: '姓名',
-    dataIndex: 'contacts',
+    dataIndex: 'username',
+    align: 'center'
+  },
+  {
+    title: '性别',
+    dataIndex: 'sex',
+    scopedSlots: { customRender: 'sexT' },
+    align: 'center'
+  },
+  {
+    title: '年龄',
+    dataIndex: 'age',
     align: 'center'
   },
   {
     title: '身份证号',
-    dataIndex: 'id',
+    dataIndex: 'idCard',
+    align: 'center'
+  },
+  {
+    title: '总金额',
+    dataIndex: 'totalAmount',
+    align: 'center'
+  },
+  {
+    title: '支付金额',
+    dataIndex: 'payment',
     align: 'center'
   },
 
+  {
+    title: ' 待支付金额',
+    scopedSlots: { customRender: 'daiHuanKuan' },
+    align: 'center'
+  },
+  {
+    title: '分期次数',
+    dataIndex: 'numberStages',
+    align: 'center'
+  },
   {
     title: '地址',
     dataIndex: 'address',
@@ -138,6 +213,13 @@ const columns = [
     align: 'center'
   },
   {
+    title: '下次考试时间',
+    dataIndex: 'nextTime',
+    scopedSlots: { customRender: 'nextTime' },
+    width: 160,
+    align: 'center'
+  },
+  {
     title: '更新时间',
     dataIndex: 'updateTime',
     scopedSlots: { customRender: 'updateTime' },
@@ -147,7 +229,7 @@ const columns = [
   {
     title: '操作',
     scopedSlots: { customRender: 'actions' },
-    width: 120,
+    width: 150,
     align: 'center',
     fixed: 'right'
   }
@@ -155,7 +237,8 @@ const columns = [
 
 export default {
   mixins: [queryFormMixin, tableMixin, rangePickerMixin],
-  components: { AccountModal },
+
+  components: { AccountModal, AddPaymentModal },
   filters: {
     roleFilter (roleId, roleOptions) {
       let role = null
@@ -176,9 +259,12 @@ export default {
 
       // 角色下拉框 备选项
       roleOptions: [],
-
+      visibleAccount: false,
       visible: false,
-      currentAccount: null
+      total: 0,
+      payment: 0,
+      currentAccount: null,
+      tableData: null
     }
   },
   computed: {
@@ -204,14 +290,38 @@ export default {
     async search () {
       this.tableLoading = true
       const { current, pageSize } = this.pagination
-      const res = await getUsers({
+      const res = await getStudent({
         ...this.form,
         current,
         pageSize
       })
-      this.rows = res
-      this.pagination.total = res.length
+
+      this.rows = res.results.student.records
+      this.total = res.results.tongJi.total
+      this.tableData = res.results.tableData
+      this.payment = res.results.tongJi.payment
+      this.pagination.total = res.results.student.total
       this.tableLoading = false
+    },
+    openNotification () {
+      this.$notification.open({
+        message: '恭喜',
+        description:
+          '提交成功',
+        onClick: () => {
+          console.log('Notification Clicked!')
+        }
+      })
+    },
+    openNotification1 () {
+      this.$notification.open({
+        message: '异常',
+        description:
+          '请联系管理员',
+        onClick: () => {
+          console.log('Notification Clicked!')
+        }
+      })
     },
     handleSearch () {
       this.pagination.current = 1
@@ -220,9 +330,39 @@ export default {
     onCreate () {
       this.visible = true
     },
+    addPayment (row) {
+      this.currentAccount = row
+      this.visible = true
+    },
     onEdit (row) {
       this.currentAccount = row
       this.visible = true
+    },
+    showPayment (row) {
+      this.currentAccount = row
+      this.visibleAccount = true
+    },
+    async passExam1 (row) {
+      const self1 = this
+
+      const res111 = await passExam({ id: row.id })
+      if (res111.code === 0) {
+        self1.openNotification()
+        self1.search()
+      } else {
+        this.openNotification1()
+      }
+    },
+    showConfirm (row) {
+      const _this = this
+      _this.$confirm({
+        title: ' 该学员时候通过(科目' + row.status + ')的考试',
+        content: '确定后通过并产生下一科目的时间',
+        onOk () {
+          _this.passExam1(row)
+        },
+        onCancel () {}
+      })
     },
     async onDelete (id) {
       const self = this
@@ -253,11 +393,64 @@ export default {
       // 关闭 modal时清空currentAccount，防止 新增/修改 混乱
       this.currentAccount = null
       this.visible = false
+    },
+    onModalAccountClose (isRefresh) {
+      // 如果子组件要求父组件刷新
+      if (isRefresh) {
+        this.search()
+      }
+      // 关闭 modal时清空currentAccount，防止 新增/修改 混乱
+      this.currentAccount = null
+      this.visibleAccount = false
+    },
+    // 导出的方法
+    exportExcel () {
+      require.ensure([], () => {
+        const { exportJsonToExcel } = require('../../excel/Export2Excel')
+        const { formatDate } = require('../../utils/date')
+        const tHeader = ['序号', '姓名', '性别', '年龄', '身份证号', '状态', '下次考试时间']
+        // 上面设置Excel的表格第一行的标题
+        const filterVal = ['id', 'username', 'sex', 'age', 'idCard', 'status', 'nextTime']
+        // 上面的index、nickName、name是tableData里对象的属性
+        const list = this.tableData // 把data里的tableData存到list
+        for (let i = 0; i < list.length; i++) {
+          /* 如要导出名字，则自定义name属性 */
+          if (list[i].sex === '1') {
+            list[i].sex = '男'
+          } else if (list[i].sex === '0') {
+            list[i].sex = '女'
+          }
+          list[i].nextTime = formatDate(new Date(list[i].nextTime), 'yyyy-MM-dd_hh:mm')
+          if (list[i].status === 1) {
+            list[i].status = '科目一'
+          } else if (list[i].status === 2) {
+            list[i].status = '科目二'
+          } else if (list[i].status === 3) {
+            list[i].status = '科目三'
+          } else if (list[i].status === 4) {
+            list[i].status = '科目四'
+          } else if (list[i].status === 5) {
+            list[i].status = '完成考试'
+          }
+          list[i].name = list[i].lastname + '对的'
+        }
+
+        const data = this.formatJson(filterVal, list)
+        /* original data */
+
+        let myDate = formatDate(new Date(), 'yyyy-MM-dd_hh:mm')
+
+        exportJsonToExcel(tHeader, data, '学员信息' + myDate)
+      })
+    },
+
+    formatJson (filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => v[j]))
     }
   },
   created () {
     this.columns = columns
-    this.queryRoles()
+
     this.search()
   }
 }

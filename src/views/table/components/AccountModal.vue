@@ -59,7 +59,7 @@
               rules: [ {required: true, message: '请输入地址!'} ]
             }
           ]"
-          :autosize="{ minRows: 2, maxRows: 6 }"
+          :autosize="{ minRows: 2, maxRows: 300 }"
         />
       </a-form-item>
       <a-form-item v-bind="formItemLayout" label="角色">
@@ -132,7 +132,7 @@ export default {
     onSubmit () {
       this.form.validateFields((err, values) => {
         if (err) return
-        
+
         this.loading = true
         const params = { ...this.account, ...values }
         if (params.id) {

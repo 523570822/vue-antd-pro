@@ -33,7 +33,8 @@ export const menuZj = [
       icon: 'table'
     },
     component: () => import(/* we5438284601153252packChunkName: "table" */ '@/views/student/student')
-  },
+  }
+/*  ,
   {
     path: 'table',
     name: 'table',
@@ -43,9 +44,9 @@ export const menuZj = [
       title: '表格页122',
       icon: 'table'
     },
-    component: () => import(/* webpackChunkName: "table" */ '@/views/table/table')
-  },
-  {
+    component: () => import(/!* webpackChunkName: "table" *!/ '@/views/table/table')
+  }
+  , {
     path: 'dashboard',
     name: 'dashboard',
     title: 'Dashboard',
@@ -63,7 +64,7 @@ export const menuZj = [
         meta: {
           title: '分析页'
         },
-        component: () => import(/* webpackChunkName: "analysis" */ '@/views/dashboard/analysis')
+        component: () => import(/!* webpackChunkName: "analysis" *!/ '@/views/dashboard/analysis')
       },
       {
         path: 'monitor',
@@ -73,16 +74,16 @@ export const menuZj = [
         meta: {
           title: '监控页'
         },
-        component: () => import(/* webpackChunkName: "monitor" */ '@/views/dashboard/monitor')
+        component: () => import(/!* webpackChunkName: "monitor" *!/ '@/views/dashboard/monitor')
       }
     ]
-  }
+  } */
 ]
 export const appRoutes = [
   {
     path: '/',
     name: 'index',
-    redirect: '/dashboard/analysis',
+    redirect: '/student',
     component: AppLayout,
     children: menuZj
   }
