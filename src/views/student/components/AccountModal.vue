@@ -178,7 +178,7 @@
           </a-form-item>
 
           <a-form-item v-bind="formItemLayout" label="下次考试时间">
-            <span  v-if="account.nextTime!=null">
+            <span  v-if="account!=null">
             <a-date-picker
               :defaultValue="moment(account.nextTime, dateFormat)" :format="dateFormat"
             />
@@ -284,6 +284,7 @@ export default {
   },
   created () {
     this.queryRoles()
+    console.log(this.account)
   }
 }
 </script>
