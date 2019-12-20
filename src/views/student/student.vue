@@ -365,9 +365,6 @@ export default {
         console.info('获取信息')
       }
     },
-    async onCreate123 () {
-
-    },
     addPayment (row) {
       this.currentAccount = row
       this.visible = true
