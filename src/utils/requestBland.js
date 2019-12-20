@@ -65,7 +65,7 @@ const onError = error => {
   } else {
     notification.error({
       message: '信息读卡器异常',
-      description: '请查看读卡设备是否正常运行'
+      description: '请查看读卡设备是否正常运行         '
     })
     return Promise.reject(error)
   }
