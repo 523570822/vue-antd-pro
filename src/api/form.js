@@ -21,7 +21,9 @@ export function nopassExam (params) {
   return request.post(`/student/nopassExam`, params)
 }
 export function deleteAccount (id) {
-  return request.delete(`/student/students/${id}`)
+  let params = { id: id }
+
+  return request.post(`/student/deleteStudentById`, params)
 }
 export function modifyPayment (params) {
   return request.post(`/student/modifyPayment`, params)
