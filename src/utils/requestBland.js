@@ -6,12 +6,36 @@ import notification from 'ant-design-vue/es/notification'
 // let api = 'http://127.0.0.1:8088/minipro'
 let api = 'http://127.0.0.1:24010/ZKIDROnline'
 let timer = null
-
+/* export const post = (url, data = {}) => {
+  return new Promise((resolve, reject) => {
+    axios.post(url, qs.stringify(data, {
+      indices: false
+    }), {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      }
+    })
+      .then(response => {
+        resolve(response.data);
+      }, err => {
+        Message.error({
+          message: '请求错误或服务器异常!请联系管理员！'
+        });
+        reject(err)
+      })
+  })
+} */
 const onError = error => {
+  console.log('响应拦截器错误')
+  console.log(error)
+
+  console.log(error.Error)
   if (error.response) {
     const status = error.response.status
     const message = error.response.statusText
-
+    console.info('返回异常信息')
+    console.info(status)
+    console.info(message)
     if (status === 403) {
       notification.error({ message: '禁止访问', description: message })
     }
@@ -38,13 +62,19 @@ const onError = error => {
         timer = null
       }, 500)
     }
+  } else {
+    notification.error({
+      message: '信息读卡器异常',
+      description: 'error'
+    })
+    return Promise.reject(error)
   }
   return Promise.reject(error)
 }
 
 const requestBland = axios.create({
   baseURL: api,
-  timeout: 15000,
+  timeout: 5000,
   headers: {
     'Content-Type': 'application/json;charset=UTF-8'
   },
@@ -83,6 +113,7 @@ requestBland.interceptors.request.use(
 
 // 响应拦截器
 requestBland.interceptors.response.use(res => {
+  console.log('响应拦截器')
   console.log(res)
   const jsonPattern = /application\/json/gi
   if (jsonPattern.test(res.headers['content-type'])) {

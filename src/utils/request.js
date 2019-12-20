@@ -6,9 +6,9 @@ import { ACCESS_TOKEN } from '@/store/mutation-types'
 import notification from 'ant-design-vue/es/notification'
 
 // api 配置
-// let api = 'http://114.116.106.203/studentapi/minipro'
+let api = 'http://114.116.106.203/studentapi/minipro'
 // let api = 'http://127.0.0.1:8088/minipro'
-let api = 'http://127.0.0.1:8088/minipro'
+
 let timer = null
 
 const onError = error => {

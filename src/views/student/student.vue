@@ -336,6 +336,7 @@ export default {
       this.search()
     },
     async onCreate () {
+      this.visible = true
       const res111 = await bland()
       console.info('获取信息')
       // eslint-disable-next-line no-invalid-regexp
@@ -363,8 +364,9 @@ export default {
         }
         console.info('获取信息')
       }
+    },
+    async onCreate123 () {
 
-      this.visible = true
     },
     addPayment (row) {
       this.currentAccount = row
