@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     slider () {
-      console.log(1)
+     // console.log(1)
     }
   },
   render () {
@@ -45,11 +45,11 @@ export default {
       borderWidth,
       title
     } = this
-    
+
     const dataSource = [...data]
-    
+
     dataSource.sort((a, b) => a.x - b.x)
-    
+
     let max
     if (dataSource[0] && dataSource[0].y1 && dataSource[0].y2) {
       max = Math.max(
@@ -57,16 +57,16 @@ export default {
         [...dataSource].sort((a, b) => b.y2 - a.y2)[0].y2
       )
     }
-    
+
     const ds = new DataSet({
       state: {
         start: dataSource[0].x,
         end: dataSource[dataSource.length - 1].x
       }
     })
-    
+
     const dv = ds.createView()
-    
+
     dv.source(dataSource).transform({
       type: 'filter',
       callback: (obj) => {
@@ -87,7 +87,7 @@ export default {
       key: 'key', // key字段
       value: 'value' // value字段
     })
-    
+
     const scale = [
       {
         dataKey: 'x',
@@ -101,22 +101,22 @@ export default {
         max
       }
     ]
-    
+
     const timeScale = {
       type: 'time',
       tickInterval: 60 * 60 * 1000,
       mask: 'HH:mm',
       range: [0, 1]
     }
-    
-    console.log(dv)
-    
+
+  //  console.log(dv)
+
     const sliderChange = ({ startValue, endValue }) => {
-      console.log(1)
+     // console.log(1)
       ds.setState('start', startValue)
       ds.setState('end', endValue)
     }
-    
+
     return (
       <div style={ { height: height + 30 } }>
         { title && <h4>{ title }</h4> }
@@ -140,7 +140,7 @@ export default {
               height={ 26 }
               padding={ [0, padding[1] + 20, 0, padding[3]] }
               onChange={ ({ startValue, endValue }) => {
-                console.log(1)
+              //  console.log(1)
                 ds.setState('start', startValue)
                 ds.setState('end', endValue)
               } }

@@ -8,7 +8,7 @@ function resolve (dir) {
 // vue.config.js
 module.exports = {
   publicPath: '/',
-
+  //   publicPath: '/student/',
   transpileDependencies: ['resize-detector', 'ant-design-vue'],
 
   // configureWebpack: {
@@ -32,6 +32,7 @@ module.exports = {
     proxy: {
       '/api': {
         target: 'http://localhost:8088', // 后端服务器
+        //   target: 'http://192.168.207.166:8081', // 后端测试服务器
         ws: false,
         changeOrigin: true,
         pathRewrite: {

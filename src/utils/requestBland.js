@@ -27,9 +27,6 @@ let timer = null
 } */
 const onError = error => {
   console.log('响应拦截器错误')
-  console.log(error)
-
-  console.log(error.Error)
   if (error.response) {
     const status = error.response.status
     const message = error.response.statusText
@@ -113,8 +110,7 @@ requestBland.interceptors.request.use(
 
 // 响应拦截器
 requestBland.interceptors.response.use(res => {
-  console.log('响应拦截器')
-  console.log(res)
+  // console.log('响应拦截器')
   const jsonPattern = /application\/json/gi
   if (jsonPattern.test(res.headers['content-type'])) {
     return res.data

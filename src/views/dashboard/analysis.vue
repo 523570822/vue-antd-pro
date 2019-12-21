@@ -18,7 +18,7 @@
           </template>
         </chart-card>
       </a-col>
-      
+
       <a-col :xl="6" :sm="12" style="margin-bottom: 16px;">
         <chart-card title="访问量" total="8,846" :loading="loading">
           <template v-slot:action>
@@ -35,7 +35,7 @@
           </template>
         </chart-card>
       </a-col>
-      
+
       <a-col :xl="6" :sm="12" style="margin-bottom: 16px;">
         <chart-card title="支付笔数" total="6,560" :loading="loading">
           <template v-slot:action>
@@ -50,7 +50,7 @@
           </template>
         </chart-card>
       </a-col>
-      
+
       <a-col :xl="6" :sm="12" style="margin-bottom: 16px;">
         <chart-card title="运营活动效果" total="78%" :loading="loading">
           <template v-slot:action>
@@ -66,7 +66,7 @@
         </chart-card>
       </a-col>
     </a-row>
-    
+
     <a-card
       :loading="loading"
       :bordered="false"
@@ -114,7 +114,7 @@
         </a-tab-pane>
       </a-tabs>
     </a-card>
-    
+
     <a-row type="flex" :gutter="16" style="margin-top: 16px;">
       <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24">
         <hot-search-card :loading="loading" />
@@ -123,7 +123,7 @@
         <sale-percent-card :loading="loading" />
       </a-col>
     </a-row>
-    
+
     <offline-data
       :loading="loading"
       :offlineData="offlineData"
@@ -231,10 +231,9 @@ export default {
       offlineChartData
     }
   },
-  
+
   methods: {
     selectDate (item) {
-      console.log(item)
       this.rangeDate = item.value
     }
   },
@@ -249,50 +248,50 @@ export default {
 
 <style lang="scss" scoped>
   .statistic-wrapper {
-    
+
     .footer-number {
       margin-left: 8px;
       color: rgba(0, 0, 0, 0.85);
     }
-    
+
     .tab-extra-wrapper {
       line-height: 55px;
       padding-right: 24px;
-      
+
       .tab-extra-actions {
         display: inline-block;
         margin-right: 24px;
-        
+
         a {
           color: rgba(0, 0, 0, .65);
         }
-        
+
         a + a {
           margin-left: 24px;
         }
       }
-      
+
       @media screen and (max-width: 992px) {
         .tab-extra-actions {
           display: none;
         }
       }
     }
-    
+
     .bar-wrapper {
       padding: 0 0 32px 32px;
     }
-    
+
     @media screen and (max-width: 768px) {
       .bar-wrapper {
         padding: 16px;
       }
     }
-    
+
     .rank-list-wrapper {
       padding: 0 32px 32px 72px;
     }
-    
+
     .sale-percent-card ::v-deep .ant-card-head {
       position: relative;
       .radio-condition {

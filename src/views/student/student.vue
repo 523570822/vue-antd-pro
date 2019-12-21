@@ -317,7 +317,7 @@ export default {
         description:
           '提交成功',
         onClick: () => {
-          console.log('Notification Clicked!')
+       //   console.log('Notification Clicked!')
         }
       })
     },
@@ -327,7 +327,7 @@ export default {
         description:
           '请联系管理员',
         onClick: () => {
-          console.log('Notification Clicked!')
+         // console.log('Notification Clicked!')
         }
       })
     },
@@ -338,9 +338,8 @@ export default {
     async onCreate () {
       this.visible = true
       const res111 = await bland()
-      console.info('获取信息')
-      // eslint-disable-next-line no-invalid-regexp
-      console.info(res111.data.ret)
+
+
       if (res111.data.ret === undefined) {
         let newMsg = res111.data.replace(/\\/g, '\\\\')
         let json = JSON.parse(newMsg)
@@ -362,7 +361,7 @@ export default {
         } else {
 
         }
-        console.info('获取信息')
+
       }
     },
     addPayment (row) {
