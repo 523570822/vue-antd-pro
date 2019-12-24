@@ -185,15 +185,32 @@
 
             />
           </a-form-item>
+<!--          <a-form-item
+            v-bind="formItemLayout"
+            label="下次考试时间"
 
-          <a-form-item v-bind="formItemLayout" label="下次考试时间">
-            <span  v-if="account!=null&&account.nextTime!=null">
+          >
+            <a-date-picker  :defaultValue="moment(account.nextTime, dateFormat)" :format="dateFormat"
+                            v-decorator="[
+            'nextTime',
+            {
+              initialValue: account && account.nextTime,
+             rules: [{ type: 'array', required: true, message: 'Please select time!' }]
+            }
+          ]"
+            />
+          </a-form-item>-->
+        <a-form-item v-bind="formItemLayout" label="下次考试时间">
             <a-date-picker
-              :defaultValue="moment(account.nextTime, dateFormat)" :format="dateFormat"
-            /></span>
-            <span  v-if="account==null||account.nextTime==null">
-            <a-date-picker/>
-               </span>
+              @change="change" :format="dateFormat"
+              v-decorator="[
+            'nextTime',
+            {
+              initialValue:account && moment(account.nextTime, 'YYYY/MM/DD'),
+             rules: [{ type: 'object', required: false, message: 'Please select time!' }]
+            }
+          ]"
+            />
           </a-form-item>
 
       <a-form-item v-bind="formItemLayout" label="现住址">
@@ -227,7 +244,7 @@ export default {
       type: Boolean,
       required: true
     },
-    account: Object
+    account: {}
   },
   data () {
     return {
@@ -239,6 +256,7 @@ export default {
         labelCol: { span: 5 },
         wrapperCol: { span: 18 }
       }
+
     }
   },
   computed: {
@@ -265,6 +283,10 @@ export default {
         if (err) return
 
         this.loading = true
+        console.info('this.account')
+        console.info(this.account)
+        console.info('this.account')
+        console.info(values)
         const params = { ...this.account, ...values }
         if (params.id) {
           this.handleModifyAccount(params)
@@ -311,11 +333,13 @@ export default {
     closeModal (isRefresh) {
       this.form.resetFields()
       this.$emit('close', isRefresh)
+    },
+    change (e) {
+      console.log(e)
     }
   },
   created () {
     this.queryRoles()
-
   }
 }
 </script>

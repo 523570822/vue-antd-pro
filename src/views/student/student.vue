@@ -173,8 +173,8 @@ const columns = [
     align: 'center'
   },
   {
-    title: '出生日期',
-    dataIndex: 'birthday',
+    title: '手机号',
+    dataIndex: 'phone',
     align: 'center'
   },
   /* {
@@ -272,7 +272,9 @@ export default {
       visible: false,
       total: 0,
       payment: 0,
-      currentAccount: null,
+      currentAccount: {
+        nextTime: new Date()
+      },
       tableData: null
     }
   },
@@ -299,10 +301,11 @@ export default {
     async search () {
       this.tableLoading = true
       const { current, pageSize } = this.pagination
+      let size = pageSize
       const res = await getStudent({
         ...this.form,
         current,
-        pageSize
+        size
       })
 
       this.rows = res.results.student.records
@@ -317,7 +320,7 @@ export default {
         description:
           '提交成功',
         onClick: () => {
-       //   console.log('Notification Clicked!')
+          //   console.log('Notification Clicked!')
         }
       })
     },
@@ -327,18 +330,18 @@ export default {
         description:
           '请联系管理员',
         onClick: () => {
-         // console.log('Notification Clicked!')
+          // console.log('Notification Clicked!')
         }
       })
     },
-    handleSearch () {
-      this.pagination.current = 1
+    handleSearch (pagination) {
+    //  this.pagination = pagination
+      // debugger
       this.search()
     },
     async onCreate () {
       this.visible = true
       const res111 = await bland()
-
 
       if (res111.data.ret === undefined) {
         let newMsg = res111.data.replace(/\\/g, '\\\\')
@@ -361,7 +364,6 @@ export default {
         } else {
 
         }
-
       }
     },
     addPayment (row) {
